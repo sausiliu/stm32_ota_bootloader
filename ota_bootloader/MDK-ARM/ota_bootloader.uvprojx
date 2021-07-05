@@ -387,6 +387,11 @@
               <FileType>2</FileType>
               <FilePath>startup_stm32f103xb.s</FilePath>
             </File>
+            <File>
+              <FileName>ymodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ymodem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -421,6 +426,16 @@
               <FileName>stm32f1xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>ymodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ymodem.c</FilePath>
             </File>
           </Files>
         </Group>

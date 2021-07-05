@@ -35,6 +35,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define MAGIC_NUM           0xCAFEBABE
+#define MISC_START          0x0800FC00
+#define UPDATE_FIRMWARE     0xAAAAAAAA
+#define ERASE_FIRMWARE      0xDEADBEEF
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,6 +61,69 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void BlinkLed(int n, int delayms)
+{
+    for (int i = 0; i < n * 2; i++) {
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        HAL_Delay(delayms);
+    }
+}
+
+int install_firmware()
+{
+    return 0;
+}
+
+uint32_t get_args()
+{
+    uint32_t PageAddr = MISC_START;
+    uint32_t Data;
+    
+    Data = *(__IO uint32_t *)(PageAddr+4);
+    return Data;
+}
+
+int finish_update()
+{
+    uint32_t PageError = 0;
+    
+    FLASH_EraseInitTypeDef My_Flash;
+    HAL_FLASH_Unlock();
+    My_Flash.TypeErase = FLASH_TYPEERASE_PAGES;
+    My_Flash.PageAddress = MISC_START;
+    My_Flash.NbPages = 1;
+    HAL_FLASHEx_Erase(&My_Flash, &PageError);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, MISC_START, MAGIC_NUM);//write magic number
+    HAL_FLASH_Lock();
+    return 0;
+}
+
+int check_misc()
+{
+    uint32_t PageAddr = MISC_START;
+    uint32_t PageError = 0;
+    uint32_t data = MAGIC_NUM;
+    
+    data = *(__IO uint32_t *)PageAddr;
+    printf("read MISC_START :%0X \n", data);
+    
+    if (data != MAGIC_NUM)
+    {
+        printf("check MISC magic number err \n");
+        return 1;
+    }
+    
+    FLASH_EraseInitTypeDef My_Flash;
+    HAL_FLASH_Unlock();
+    My_Flash.TypeErase = FLASH_TYPEERASE_PAGES;
+    My_Flash.PageAddress = PageAddr;
+    My_Flash.NbPages = 1;
+    HAL_FLASHEx_Erase(&My_Flash, &PageError);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, PageAddr, data);
+    HAL_FLASH_Lock();
+    
+    return 0;
+}
 /* USER CODE END 0 */
 
 /**
@@ -86,25 +153,45 @@ int main(void)
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
+    uint32_t BootArg = 0x00000000;
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
-
-    /* USER CODE END 2 */
-
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
+    
+    BlinkLed(4, 200);
     printf("*****************************\n");
     printf("*                           *\n");
     printf("*         Bootloader        *\n");
     printf("*                           *\n");
     printf("*****************************\n");
+    if (check_misc() != 0){
+        printf("check misc failed !\n");
+    } else {
+        BootArg = get_args();
+    }
+    
+    printf("read misc args: 0x%0X\n", BootArg);
+    switch(BootArg) {
+        case 0x00000000:
+            break;
+        case UPDATE_FIRMWARE:
+            install_firmware();
+            break;
+        case ERASE_FIRMWARE:
+        default:
+            break;
+    }
+    
+    /* USER CODE END 2 */
 
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
     while (1)
-    {
+    {   
+        /*should never be here*/
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-        HAL_Delay(300);
+        HAL_Delay(50);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
