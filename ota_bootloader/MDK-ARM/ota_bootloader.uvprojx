@@ -137,7 +137,7 @@
             <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2V8M.DLL</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -387,11 +387,6 @@
               <FileType>2</FileType>
               <FilePath>startup_stm32f103xb.s</FilePath>
             </File>
-            <File>
-              <FileName>ymodem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ymodem.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -436,6 +431,16 @@
               <FileName>ymodem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ymodem.c</FilePath>
+            </File>
+            <File>
+              <FileName>download.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\download.c</FilePath>
+            </File>
+            <File>
+              <FileName>upload.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\upload.c</FilePath>
             </File>
           </Files>
         </Group>

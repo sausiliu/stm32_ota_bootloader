@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
+#include "common.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -182,7 +183,7 @@ int main(void)
         default:
             break;
     }
-    
+    Main_Menu();
     /* USER CODE END 2 */
 
     /* Infinite loop */

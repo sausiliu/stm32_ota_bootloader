@@ -196,10 +196,11 @@ uint32_t GetIntegerInput(int32_t * num)
   */
 uint32_t SerialKeyPressed(uint8_t *key)
 {
-
-  if (READ_REG(EVAL_COM1.Instance->SR) != RESET)
-  {
-    *key = (uint8_t)EVAL_COM1.Instance->DR;
+//  if (READ_REG(EVAL_COM1.Instance->SR) != RESET)
+//  {
+//    *key = (uint8_t)EVAL_COM1.Instance->DR;
+	if (HAL_UART_Receive(&EVAL_COM1, key, 1, HAL_MAX_DELAY) == HAL_OK)
+	{
     return 1;
   }
   else
@@ -387,7 +388,7 @@ void FLASH_DisableWriteProtectionPages(void)
 void Main_Menu(void)
 {
   uint8_t key = 0;
-  
+
   /* Get the number of block (4 or 2 pages) from where the user program will be loaded */
   BlockNbr = (FlashDestination - 0x08000000) >> 12;
 
