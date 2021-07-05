@@ -80,3 +80,4 @@ dkms.conf
 *.hex
 *.axf
 JLinkLog.txt
+~$*
